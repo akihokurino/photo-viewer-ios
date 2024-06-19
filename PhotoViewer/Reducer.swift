@@ -88,7 +88,7 @@ struct AppReducer: Reducer {
 extension AppReducer {
     struct State: Equatable {
         var initialized = false
-        var assets: WithCursor<LocalAsset> = WithCursor.new(limit: limit)
+        var assets: WithCursor<LocalAsset> = WithCursor.new()
         var assetSelection: Int?
         var isPresentedHUD = false
         var isPresentedNextLoading = false

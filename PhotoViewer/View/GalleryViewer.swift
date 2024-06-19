@@ -55,13 +55,17 @@ struct GalleryViewer: View {
                 .ignoresSafeArea()
 
             LazyHStack(spacing: hStackSpacing) {
-                ForEach(items, id: \.id) { item in
+                ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
                     if item == selectedItem {
                         LocalImageView(asset: item, size: size, namespace: namespace, autoHeight: true)
                             .offset(imageOffsetSize)
                             .scaleEffect(currentScale)
-                    } else {
+                    } else if abs(i - index) <= 5 {
                         LocalImageView(asset: item, size: size, autoHeight: true)
+                    } else {
+                        Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: size.width, height: size.height)
                     }
                 }
             }
