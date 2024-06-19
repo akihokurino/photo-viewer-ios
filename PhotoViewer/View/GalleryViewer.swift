@@ -57,11 +57,11 @@ struct GalleryViewer: View {
             LazyHStack(spacing: hStackSpacing) {
                 ForEach(items, id: \.id) { item in
                     if item == selectedItem {
-                        LocalImageView(asset: item, size: size, namespace: namespace)
+                        LocalImageView(asset: item, size: size, namespace: namespace, autoHeight: true)
                             .offset(imageOffsetSize)
                             .scaleEffect(currentScale)
                     } else {
-                        LocalImageView(asset: item, size: size)
+                        LocalImageView(asset: item, size: size, autoHeight: true)
                     }
                 }
             }

@@ -7,16 +7,24 @@ struct LocalImageView: View {
     private var isCircle: Bool = false
     private let radius: CGFloat
     private let namespace: Namespace.ID?
+    private var autoHeight: Bool = false
     
     @ObservedObject var resolver: LocalImageResolver
     
-    init(asset: LocalAsset, size: CGSize, isCircle: Bool = false, radius: CGFloat = 0, namespace: Namespace.ID? = nil) {
+    init(asset: LocalAsset,
+         size: CGSize,
+         isCircle: Bool = false,
+         radius: CGFloat = 0,
+         namespace: Namespace.ID? = nil,
+         autoHeight: Bool = false)
+    {
         self.resolver = LocalImageResolver(asset: asset, size: size)
         self.asset = asset
         self.size = size
         self.isCircle = isCircle
         self.radius = radius
         self.namespace = namespace
+        self.autoHeight = autoHeight
     }
         
     var body: some View {
@@ -25,14 +33,14 @@ struct LocalImageView: View {
                 Image(uiImage: image)
                     .resizable()
                     .applyGeometryEffect(id: asset.id, namespace: namespace, isSource: true)
-                    .scaledToFill()
-                    .applySize(size: size)
+                    .applyScaleType(type: autoHeight ? .fit : .fill)
+                    .applySize(size: size, autoHeight: autoHeight)
                     .applyClip(isCircle: isCircle)
                     .cornerRadius(radius)
                     .contentShape(RoundedRectangle(cornerRadius: radius))
             } else {
                 ProgressView()
-                    .applySize(size: size)
+                    .applySize(size: size, autoHeight: false)
             }
             
             HStack {
@@ -61,7 +69,7 @@ class LocalImageResolver: ObservableObject {
     @Published var displayImage: UIImage?
     
     private var cacheKey: String {
-        return asset.id // "\(asset.id)-\(size.width)×\(size.height)"
+        return "\(asset.id)-\(size.width)×\(size.height)"
     }
     
     init(asset: LocalAsset, size: CGSize) {
@@ -101,13 +109,18 @@ class LocalImageResolver: ObservableObject {
     }
 }
 
+enum ScaleType {
+    case fill
+    case fit
+}
+
 extension View {
-    func applySize(size: CGSize?) -> some View {
+    func applySize(size: CGSize, autoHeight: Bool) -> some View {
         Group {
-            if let size = size {
-                self.frame(width: size.width, height: size.height)
+            if autoHeight {
+                self.frame(width: size.width)
             } else {
-                self.frame(maxWidth: .infinity, maxHeight: .infinity)
+                self.frame(width: size.width, height: size.height)
             }
         }
     }
@@ -118,6 +131,17 @@ extension View {
                 self.clipShape(Circle())
             } else {
                 self.clipped()
+            }
+        }
+    }
+    
+    func applyScaleType(type: ScaleType) -> some View {
+        Group {
+            switch type {
+            case .fill:
+                self.scaledToFill()
+            case .fit:
+                self.scaledToFit()
             }
         }
     }
