@@ -4,8 +4,9 @@ struct PagingGridView<T: Identifiable>: View {
     let space = "PagingGridView"
     let columns: Int
     let gap: CGFloat
-    let itemView: (T) -> AnyView
-    let onTap: (T) -> Void
+    let size: CGSize
+    let itemView: (Int, T) -> AnyView
+    let onTap: (Int, T) -> Void
     let onNext: () -> Void
     let onRefresh: () async -> Void
 
@@ -20,9 +21,9 @@ struct PagingGridView<T: Identifiable>: View {
             VStack(alignment: .leading, spacing: 0) {
                 ZStack {
                     LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: gap), count: columns) as [GridItem], spacing: gap) {
-                        ForEach(data.items, id: \.id) { item in
-                            itemView(item).onTapGesture {
-                                onTap(item)
+                        ForEach(Array(data.items.enumerated()), id: \.element.id) { index, item in
+                            itemView(index, item).onTapGesture {
+                                onTap(index, item)
                             }
                         }
                     }
@@ -39,7 +40,7 @@ struct PagingGridView<T: Identifiable>: View {
         }
         .coordinateSpace(name: space)
         .onPreferenceChange(PagingGridViewOffsetKey.self) { offset in
-            if !isLoading && !isRefreshing && offset < windowHeight() + 1 && data.items.count > 0 && data.hasNext {
+            if !isLoading && !isRefreshing && offset < size.height + 1 && data.items.count > 0 && data.hasNext {
                 onNext()
             }
         }
@@ -72,12 +73,4 @@ struct PagingGridViewOffsetKey: PreferenceKey {
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }
-}
-
-func windowHeight() -> CGFloat {
-    let scenes = UIApplication.shared.connectedScenes
-    if let windowScene = scenes.first as? UIWindowScene, let window = windowScene.windows.first {
-        return window.frame.height
-    }
-    return UIScreen.main.bounds.size.height
 }

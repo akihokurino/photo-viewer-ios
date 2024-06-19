@@ -6,15 +6,17 @@ struct LocalImageView: View {
     private let size: CGSize
     private var isCircle: Bool = false
     private let radius: CGFloat
+    private let namespace: Namespace.ID?
     
     @ObservedObject var resolver: LocalImageResolver
     
-    init(asset: LocalAsset, size: CGSize, isCircle: Bool = false, radius: CGFloat = 0) {
+    init(asset: LocalAsset, size: CGSize, isCircle: Bool = false, radius: CGFloat = 0, namespace: Namespace.ID? = nil) {
         self.resolver = LocalImageResolver(asset: asset, size: size)
         self.asset = asset
         self.size = size
         self.isCircle = isCircle
         self.radius = radius
+        self.namespace = namespace
     }
         
     var body: some View {
@@ -22,8 +24,8 @@ struct LocalImageView: View {
             if let image = resolver.displayImage {
                 Image(uiImage: image)
                     .resizable()
+                    .applyGeometryEffect(id: asset.id, namespace: namespace, isSource: true)
                     .scaledToFill()
-                    .cornerRadius(radius)
                     .applySize(size: size)
                     .applyClip(isCircle: isCircle)
                     .cornerRadius(radius)
@@ -58,6 +60,10 @@ class LocalImageResolver: ObservableObject {
     
     @Published var displayImage: UIImage?
     
+    private var cacheKey: String {
+        return asset.id // "\(asset.id)-\(size.width)×\(size.height)"
+    }
+    
     init(asset: LocalAsset, size: CGSize) {
         self.asset = asset
         self.size = size
@@ -67,7 +73,7 @@ class LocalImageResolver: ObservableObject {
     }
     
     func imageFromCache() -> Bool {
-        guard let cacheImage = DiskCachedImageStore.shared.get(key: asset.id) else { return false }
+        guard let cacheImage = CachedImageStore.shared.get(key: cacheKey) else { return false }
         displayImage = cacheImage
         return true
     }
@@ -75,13 +81,13 @@ class LocalImageResolver: ObservableObject {
     func imageFromLocalDevice() {
         requestID = PhotosClient.liveValue.requestCachedImage(
             asset: asset,
-            targetSize: CGSize(width: size.width * 2, height: size.height * 2),
+            targetSize: CGSize(width: size.width * 3, height: size.height * 3),
             completion: { image in
                 guard let image = image else {
                     return
                 }
                 
-                DiskCachedImageStore.shared.set(key: self.asset.id, image: image)
+                CachedImageStore.shared.set(key: self.cacheKey, image: image)
                 DispatchQueue.main.async {
                     self.displayImage = image
                 }
@@ -112,6 +118,16 @@ extension View {
                 self.clipShape(Circle())
             } else {
                 self.clipped()
+            }
+        }
+    }
+    
+    func applyGeometryEffect(id: String, namespace: Namespace.ID?, isSource: Bool) -> some View {
+        Group {
+            if let namespace = namespace {
+                self.matchedGeometryEffect(id: id, in: namespace, isSource: isSource)
+            } else {
+                self
             }
         }
     }

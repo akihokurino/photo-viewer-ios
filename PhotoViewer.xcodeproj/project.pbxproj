@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0248B02A2C21B9360008FB46 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0248B0292C21B9360008FB46 /* Error.swift */; };
+		0256D0382C2284BD00A9488B /* GalleryViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0256D0372C2284BD00A9488B /* GalleryViewer.swift */; };
 		02AF24E02C218A2A00801087 /* PhotoViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AF24DF2C218A2A00801087 /* PhotoViewerApp.swift */; };
 		02AF24E22C218A2A00801087 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AF24E12C218A2A00801087 /* ContentView.swift */; };
 		02AF24E42C218A2B00801087 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02AF24E32C218A2B00801087 /* Assets.xcassets */; };
@@ -24,7 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0248B0292C21B9360008FB46 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		0256D0372C2284BD00A9488B /* GalleryViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewer.swift; sourceTree = "<group>"; };
 		02AF24DC2C218A2A00801087 /* PhotoViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02AF24DF2C218A2A00801087 /* PhotoViewerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerApp.swift; sourceTree = "<group>"; };
 		02AF24E12C218A2A00801087 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -79,7 +79,6 @@
 				02AF24F32C218D9D00801087 /* Photos.swift */,
 				02AF24F52C218E0A00801087 /* Cursor.swift */,
 				02AF25012C21973800801087 /* Cache.swift */,
-				0248B0292C21B9360008FB46 /* Error.swift */,
 				02AF24E32C218A2B00801087 /* Assets.xcassets */,
 				02AF24E52C218A2B00801087 /* PhotoViewer.entitlements */,
 				02AF24FE2C21957300801087 /* Info.plist */,
@@ -101,6 +100,7 @@
 			children = (
 				02AF24E12C218A2A00801087 /* ContentView.swift */,
 				02AF24FA2C2192A800801087 /* PagingGridView.swift */,
+				0256D0372C2284BD00A9488B /* GalleryViewer.swift */,
 				02AF24FF2C21972000801087 /* LocalImageView.swift */,
 				02AF24FC2C21934B00801087 /* HUD.swift */,
 				02AF25032C219F3300801087 /* Spacer.swift */,
@@ -187,7 +187,7 @@
 				02AF25002C21972000801087 /* LocalImageView.swift in Sources */,
 				02AF25042C219F3300801087 /* Spacer.swift in Sources */,
 				02AF25022C21973800801087 /* Cache.swift in Sources */,
-				0248B02A2C21B9360008FB46 /* Error.swift in Sources */,
+				0256D0382C2284BD00A9488B /* GalleryViewer.swift in Sources */,
 				02AF24FB2C2192A800801087 /* PagingGridView.swift in Sources */,
 				02AF24F42C218D9D00801087 /* Photos.swift in Sources */,
 				02AF24F62C218E0A00801087 /* Cursor.swift in Sources */,

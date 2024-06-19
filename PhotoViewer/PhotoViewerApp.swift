@@ -11,3 +11,7 @@ struct PhotoViewerApp: App {
         }
     }
 }
+
+enum AppError: Error {
+    case plain(String)
+}

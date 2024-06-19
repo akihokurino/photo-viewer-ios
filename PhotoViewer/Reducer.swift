@@ -12,6 +12,8 @@ extension DependencyValues {
     }
 }
 
+let limit = 30
+
 struct AppReducer: Reducer {
     @Dependency(\.photosClient) var photosClient
 
@@ -25,13 +27,14 @@ struct AppReducer: Reducer {
 
                 state.initialized = true
                 state.isPresentedHUD = true
+                let pager = state.assets
 
                 return .run { send in
                     let status = await photosClient.requestAuthorization()
 
                     if status == .authorized || status == .limited {
-                        let result = await photosClient.getAssets(from: WithCursor<LocalAsset>.new())
-                        await send(.setLocalAssets(result))
+                        let result = await photosClient.getAssets(from: pager)
+                        await send(.setAssets(result))
                     }
 
                     await send(.isPresentedHUD(false))
@@ -42,25 +45,31 @@ struct AppReducer: Reducer {
                 }
 
                 state.isPresentedNextLoading = true
-                let pager = state.localAssets
+                let pager = state.assets
 
                 return .run { send in
                     let nextPager = await photosClient.getAssets(from: pager)
-                    await send(.setLocalAssets(nextPager))
-
+                    await send(.setAssets(nextPager))
                     await send(.isPresentedNextLoading(false))
                 }
             case .refreshLocalAssets:
+                guard !state.isPresentedPullToRefresh else {
+                    return .none
+                }
+
                 state.isPresentedPullToRefresh = true
+                let pager = WithCursor<LocalAsset>.new(limit: limit)
 
                 return .run { send in
-                    let nextPager = await photosClient.getAssets(from: WithCursor<LocalAsset>.new())
-                    await send(.setLocalAssets(nextPager))
-
+                    let nextPager = await photosClient.getAssets(from: pager)
+                    await send(.setAssets(nextPager))
                     await send(.isPresentedPullToRefresh(false))
                 }
-            case .setLocalAssets(let assets):
-                state.localAssets = assets
+            case .setAssets(let assets):
+                state.assets = assets
+                return .none
+            case .setAssetSelection(let val):
+                state.assetSelection = val
                 return .none
             case .isPresentedHUD(let val):
                 state.isPresentedHUD = val
@@ -79,17 +88,27 @@ struct AppReducer: Reducer {
 extension AppReducer {
     struct State: Equatable {
         var initialized = false
-        var localAssets: WithCursor<LocalAsset> = WithCursor.new()
+        var assets: WithCursor<LocalAsset> = WithCursor.new(limit: limit)
+        var assetSelection: Int?
         var isPresentedHUD = false
         var isPresentedNextLoading = false
         var isPresentedPullToRefresh = false
+
+        var navigationTitle: String {
+            if let selection = assetSelection {
+                return "Photos - \(selection)"
+            } else {
+                return "Photos"
+            }
+        }
     }
 
     enum Action {
         case initialize
         case nextLocalAssets
         case refreshLocalAssets
-        case setLocalAssets(WithCursor<LocalAsset>)
+        case setAssets(WithCursor<LocalAsset>)
+        case setAssetSelection(Int?)
         case isPresentedHUD(Bool)
         case isPresentedNextLoading(Bool)
         case isPresentedPullToRefresh(Bool)
