@@ -67,16 +67,16 @@ struct ContentView: View {
                                 .zIndex(2)
                             }
                         }
-                        .onAppear {
-                            viewStore.send(.initialize)
-                        }
-                        .navigationTitle(viewStore.navigationTitle)
-                        .navigationBarTitleDisplayMode(.inline)
-                        .modifier(HUDModifier(isPresented: viewStore.binding(
-                            get: { $0.isPresentedHUD },
-                            send: AppReducer.Action.isPresentedHUD
-                        )))
                     }
+                }
+                .navigationTitle(viewStore.navigationTitle)
+                .navigationBarTitleDisplayMode(.inline)
+                .modifier(HUDModifier(isPresented: viewStore.binding(
+                    get: { $0.isPresentedHUD },
+                    send: AppReducer.Action.isPresentedHUD
+                )))
+                .onAppear {
+                    viewStore.send(.initialize)
                 }
             }
         }
