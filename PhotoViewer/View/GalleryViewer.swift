@@ -54,7 +54,7 @@ struct GalleryViewer: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
 
-            LazyHStack(spacing: hStackSpacing) {
+            HStack(spacing: hStackSpacing) {
                 ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
                     if item == selectedItem {
                         LocalImageView(asset: item, size: size, namespace: namespace, autoHeight: true)
