@@ -214,67 +214,6 @@ class PhotosClient {
 }
 
 typealias LocalAssetAuthorizationStatus = PHAuthorizationStatus
-typealias LocalAsset = PHAsset
-
-extension LocalAsset: Identifiable, HasDate {
-    public var id: String {
-        return localIdentifier
-    }
-
-    var date: Date? {
-        return creationDate
-    }
-
-    var isVideo: Bool {
-        return mediaType == .video
-    }
-
-    var videoDurationSecond: Int? {
-        if self.isVideo {
-            return Int(round(duration))
-        } else {
-            return nil
-        }
-    }
-
-    var displayDurationSecond: String {
-        guard let second = videoDurationSecond else {
-            return ""
-        }
-        return "\(second)S"
-    }
-}
-
-struct DateGroup<T: HasDate & Equatable & Hashable>: Equatable, Identifiable {
-    let date: Date
-    let assets: [T]
-
-    var id: String {
-        return self.date.ISO8601Format()
-    }
-
-    static func from(assets: [T]) -> [DateGroup] {
-        let calendar = Calendar.current
-
-        let groupedAssets = Dictionary(grouping: assets) { asset -> Date in
-            guard let creationDate = asset.date else {
-                return Date()
-            }
-            let components = calendar.dateComponents([.year, .month, .day], from: creationDate)
-            return calendar.date(from: components) ?? Date()
-        }
-
-        let sortedGroups = groupedAssets.map { key, value -> DateGroup in
-            DateGroup(date: key, assets: value)
-        }.sorted { $0.date > $1.date }
-
-        return sortedGroups
-    }
-
-    func isAllSelected(selected: Set<T>) -> Bool {
-        return self.assets.allSatisfy { selected.contains($0) }
-    }
-}
 
 extension String {
     var dateTime: Date? {
@@ -289,21 +228,5 @@ extension Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return dateFormatter.string(from: self)
-    }
-
-    var dateString: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter.string(from: self)
-    }
-}
-
-protocol HasDate {
-    var date: Date? { get }
-}
-
-extension HasDate {
-    func mustDate() -> Date {
-        return date ?? Date()
     }
 }
