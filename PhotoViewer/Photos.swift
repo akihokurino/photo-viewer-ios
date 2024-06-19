@@ -92,7 +92,7 @@ class PhotosClient {
     func requestImage(asset: PHAsset, targetSize: CGSize) async throws -> UIImage {
         return try await withCheckedThrowingContinuation { continuation in
             let options = PHImageRequestOptions()
-            options.deliveryMode = .highQualityFormat
+            options.deliveryMode = .opportunistic
             PHImageManager.default().requestImage(
                 for: asset,
                 targetSize: targetSize,
@@ -115,7 +115,7 @@ class PhotosClient {
         completion: @escaping (UIImage?) -> ()
     ) -> PHImageRequestID {
         let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
+        options.deliveryMode = .opportunistic
 
         return PHCachingImageManager.default().requestImage(
             for: asset,
