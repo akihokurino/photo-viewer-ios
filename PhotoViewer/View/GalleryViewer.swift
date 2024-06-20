@@ -57,9 +57,14 @@ struct GalleryViewer: View {
             HStack(spacing: hStackSpacing) {
                 ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
                     if item == selectedItem {
-                        LocalImageView(asset: item, size: size, namespace: namespace, autoHeight: true)
-                            .offset(imageOffsetSize)
-                            .scaleEffect(currentScale)
+                        if item.isVideo {
+                            LoopVideoPlayerView(asset: item, size: size, namespace: namespace)
+                                .offset(imageOffsetSize)
+                        } else {
+                            LocalImageView(asset: item, size: size, namespace: namespace, autoHeight: true)
+                                .offset(imageOffsetSize)
+                                .scaleEffect(currentScale)
+                        }
                     } else if abs(i - index) <= 5 {
                         LocalImageView(asset: item, size: size, autoHeight: true)
                     } else {
@@ -89,11 +94,11 @@ struct GalleryViewer: View {
                 switch dragStartAxis {
                 case .horizontal:
                     if value.translation.width > 0 && index == 0 {
-                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 0.3
+                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 1.5
                     } else if value.translation.width < 0 && index == items.count - 1 {
-                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 0.3
+                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 1.5
                     } else {
-                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 0.6
+                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 1.5
                     }
                 case .verticalUp:
                     break
@@ -131,7 +136,7 @@ struct GalleryViewer: View {
                 case .verticalUp:
                     break
                 case .verticalDown:
-                    if value.translation.height > 0 {
+                    if value.translation.height > 200 {
                         onClose()
                     } else {
                         withAnimation(.easeOut(duration: 0.2)) {

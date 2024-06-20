@@ -40,7 +40,7 @@ struct LocalImageView: View {
                     .contentShape(RoundedRectangle(cornerRadius: radius))
             } else {
                 ProgressView()
-                    .applySize(size: size, autoHeight: false)
+                    .applySize(size: size)
             }
             
             HStack {
@@ -115,7 +115,7 @@ enum ScaleType {
 }
 
 extension View {
-    func applySize(size: CGSize, autoHeight: Bool) -> some View {
+    func applySize(size: CGSize, autoHeight: Bool = false) -> some View {
         Group {
             if autoHeight {
                 self.frame(width: size.width)

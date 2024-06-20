@@ -1,3 +1,4 @@
+import AVKit
 import UIKit
 
 class CachedImageStore {
@@ -35,5 +36,21 @@ class DiskCachedImageStore {
         if let data = image.jpegData(compressionQuality: 1.0) {
             try? data.write(to: fileURL)
         }
+    }
+}
+
+class CachedVideoStore {
+    static let shared = CachedVideoStore()
+
+    private init() {}
+
+    private var cache = NSCache<NSString, AVAsset>()
+
+    func get(key: String) -> AVAsset? {
+        return cache.object(forKey: NSString(string: key))
+    }
+
+    func set(key: String, video: AVAsset) {
+        cache.setObject(video, forKey: NSString(string: key))
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0222DAF22C2400780004637B /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0222DAF12C2400780004637B /* VideoPlayerView.swift */; };
 		0256D0382C2284BD00A9488B /* GalleryViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0256D0372C2284BD00A9488B /* GalleryViewer.swift */; };
 		0256D03D2C22BF2800A9488B /* LocalAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0256D03C2C22BF2800A9488B /* LocalAsset.swift */; };
 		02AF24E02C218A2A00801087 /* PhotoViewerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AF24DF2C218A2A00801087 /* PhotoViewerApp.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0222DAF12C2400780004637B /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		0256D0372C2284BD00A9488B /* GalleryViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewer.swift; sourceTree = "<group>"; };
 		0256D03C2C22BF2800A9488B /* LocalAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAsset.swift; sourceTree = "<group>"; };
 		02AF24DC2C218A2A00801087 /* PhotoViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +115,7 @@
 				02AF24FA2C2192A800801087 /* PagingGridView.swift */,
 				0256D0372C2284BD00A9488B /* GalleryViewer.swift */,
 				02AF24FF2C21972000801087 /* LocalImageView.swift */,
+				0222DAF12C2400780004637B /* VideoPlayerView.swift */,
 				02AF24FC2C21934B00801087 /* HUD.swift */,
 				02AF25032C219F3300801087 /* Spacer.swift */,
 			);
@@ -206,6 +209,7 @@
 				02AF24E22C218A2A00801087 /* ContentView.swift in Sources */,
 				02AF24FD2C21934B00801087 /* HUD.swift in Sources */,
 				02AF24E02C218A2A00801087 /* PhotoViewerApp.swift in Sources */,
+				0222DAF22C2400780004637B /* VideoPlayerView.swift in Sources */,
 				02AF24F22C218B5D00801087 /* Reducer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
