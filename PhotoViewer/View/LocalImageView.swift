@@ -9,7 +9,7 @@ struct LocalImageView: View {
     private let namespace: Namespace.ID?
     private var autoHeight: Bool = false
     
-    @ObservedObject var resolver: LocalImageResolver
+    @StateObject var resolver: LocalImageResolver
     
     init(asset: LocalAsset,
          size: CGSize,
@@ -18,7 +18,7 @@ struct LocalImageView: View {
          namespace: Namespace.ID? = nil,
          autoHeight: Bool = false)
     {
-        self.resolver = LocalImageResolver(asset: asset, size: size)
+        self._resolver = StateObject(wrappedValue: LocalImageResolver(asset: asset, size: size))
         self.asset = asset
         self.size = size
         self.isCircle = isCircle

@@ -7,7 +7,7 @@ struct LoopVideoPlayerView: View {
     private let start: Double
     private let end: Double?
     private let namespace: Namespace.ID?
-    @ObservedObject var resolver: VideoResolver
+    @StateObject var resolver: VideoResolver
     @State private var player = AVPlayer()
     @State private var timeObserverToken: Any?
     @State private var currentTime: Double = 0
@@ -19,7 +19,7 @@ struct LoopVideoPlayerView: View {
          end: Double? = nil,
          namespace: Namespace.ID? = nil)
     {
-        self.resolver = VideoResolver(asset: asset)
+        self._resolver = StateObject(wrappedValue: VideoResolver(asset: asset))
         self.asset = asset
         self.size = size
         self.start = start

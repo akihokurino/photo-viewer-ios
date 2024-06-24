@@ -23,6 +23,8 @@
 		02AF25002C21972000801087 /* LocalImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AF24FF2C21972000801087 /* LocalImageView.swift */; };
 		02AF25022C21973800801087 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AF25012C21973800801087 /* Cache.swift */; };
 		02AF25042C219F3300801087 /* Spacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AF25032C219F3300801087 /* Spacer.swift */; };
+		02BCFB852C2942F900C84455 /* TabViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BCFB842C2942F900C84455 /* TabViewer.swift */; };
+		02BCFB872C29596200C84455 /* ZoomableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02BCFB862C29596200C84455 /* ZoomableScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		02AF24FF2C21972000801087 /* LocalImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalImageView.swift; sourceTree = "<group>"; };
 		02AF25012C21973800801087 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		02AF25032C219F3300801087 /* Spacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacer.swift; sourceTree = "<group>"; };
+		02BCFB842C2942F900C84455 /* TabViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewer.swift; sourceTree = "<group>"; };
+		02BCFB862C29596200C84455 /* ZoomableScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,10 +118,12 @@
 				02AF24E12C218A2A00801087 /* ContentView.swift */,
 				02AF24FA2C2192A800801087 /* PagingGridView.swift */,
 				0256D0372C2284BD00A9488B /* GalleryViewer.swift */,
+				02BCFB842C2942F900C84455 /* TabViewer.swift */,
 				02AF24FF2C21972000801087 /* LocalImageView.swift */,
 				0222DAF12C2400780004637B /* VideoPlayerView.swift */,
 				02AF24FC2C21934B00801087 /* HUD.swift */,
 				02AF25032C219F3300801087 /* Spacer.swift */,
+				02BCFB862C29596200C84455 /* ZoomableScrollView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -207,6 +213,8 @@
 				0256D03D2C22BF2800A9488B /* LocalAsset.swift in Sources */,
 				02AF24F62C218E0A00801087 /* Cursor.swift in Sources */,
 				02AF24E22C218A2A00801087 /* ContentView.swift in Sources */,
+				02BCFB852C2942F900C84455 /* TabViewer.swift in Sources */,
+				02BCFB872C29596200C84455 /* ZoomableScrollView.swift in Sources */,
 				02AF24FD2C21934B00801087 /* HUD.swift in Sources */,
 				02AF24E02C218A2A00801087 /* PhotoViewerApp.swift in Sources */,
 				0222DAF22C2400780004637B /* VideoPlayerView.swift in Sources */,

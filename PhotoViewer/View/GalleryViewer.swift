@@ -33,7 +33,7 @@ struct GalleryViewer: View {
         return items[index]
     }
 
-    init(namespace: Namespace.ID, items: [LocalAsset], index: Int, size: CGSize, onChangeIndex: @escaping (_ index: Int) -> Void, onClose: @escaping () -> Void) {
+    init(namespace: Namespace.ID, items: [LocalAsset], size: CGSize, index: Int, onChangeIndex: @escaping (_ index: Int) -> Void, onClose: @escaping () -> Void) {
         self.namespace = namespace
         self.items = items
         self.size = size

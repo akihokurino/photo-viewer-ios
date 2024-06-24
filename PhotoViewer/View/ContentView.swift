@@ -54,8 +54,7 @@ struct ContentView: View {
 
                             if isPresentedGalleryViewer {
                                 GeometryReader(content: { proxy in
-                                    GalleryViewer(namespace: namespace, items: viewStore.assets.items, index: viewStore.assetSelection ?? 0, size: proxy.size, onChangeIndex: { index in
-                                        reader.scrollTo(viewStore.assets.items[index].id)
+                                    GalleryViewer(namespace: namespace, items: viewStore.assets.items, size: proxy.size, index: viewStore.assetSelection ?? 0, onChangeIndex: { index in
                                         viewStore.send(.setAssetSelection(index))
                                     }) {
                                         withAnimation(.easeOutExpo) {
@@ -63,14 +62,37 @@ struct ContentView: View {
                                         }
                                         viewStore.send(.setAssetSelection(nil))
                                     }
+
+//                                    TabViewer(namespace: namespace, items: viewStore.assets.items, size: proxy.size, index: viewStore.binding(
+//                                        get: { $0.assetSelection ?? 0 },
+//                                        send: AppReducer.Action.setAssetSelection
+//                                    ))
                                 })
                                 .zIndex(2)
                             }
+                        }
+                        .onChange(of: viewStore.assetSelection) { _, new in
+                            guard let index = new else {
+                                return
+                            }
+                            reader.scrollTo(viewStore.assets.items[index].id)
                         }
                     }
                 }
                 .navigationTitle(viewStore.navigationTitle)
                 .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(leading: Group {
+                    if isPresentedGalleryViewer {
+                        Button(action: {
+                            withAnimation(.easeOutExpo) {
+                                isPresentedGalleryViewer = false
+                            }
+                            viewStore.send(.setAssetSelection(nil))
+                        }) {
+                            Image(systemName: "xmark").foregroundColor(Color(UIColor.label))
+                        }
+                    }
+                })
                 .modifier(HUDModifier(isPresented: viewStore.binding(
                     get: { $0.isPresentedHUD },
                     send: AppReducer.Action.isPresentedHUD
