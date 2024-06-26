@@ -94,11 +94,11 @@ struct GalleryViewer: View {
                 switch dragStartAxis {
                 case .horizontal:
                     if value.translation.width > 0 && index == 0 {
-                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 1.5
+                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 0.3
                     } else if value.translation.width < 0 && index == items.count - 1 {
-                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 1.5
+                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 0.3
                     } else {
-                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 1.5
+                        pagerOffsetSize.width = -(size.width + hStackSpacing) * CGFloat(index) + value.translation.width * 0.6
                     }
                 case .verticalUp:
                     break
