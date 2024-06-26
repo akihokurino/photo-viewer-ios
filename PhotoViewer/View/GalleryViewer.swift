@@ -126,10 +126,10 @@ struct GalleryViewer: View {
                     } else if value.predictedEndTranslation.width > size.width / 2 && index > 0 {
                         targetIndex -= 1
                     }
+
                     withAnimation(.easeOut(duration: 0.2)) {
                         pagerOffsetSize = CGSize(width: -(size.width + hStackSpacing) * CGFloat(targetIndex), height: 0)
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+                    } completion: {
                         index = targetIndex
                         onChangeIndex(targetIndex)
                     }
