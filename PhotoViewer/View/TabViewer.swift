@@ -4,15 +4,16 @@ struct TabViewer: View {
     let namespace: Namespace.ID
     let items: [LocalAsset]
     let size: CGSize
+    let onChangeIndex: (_ index: Int) -> Void
 
-    @Binding var index: Int
+    @State private var index: Int
 
-    init(namespace: Namespace.ID, items: [LocalAsset], size: CGSize, index: Binding<Int>) {
+    init(namespace: Namespace.ID, items: [LocalAsset], size: CGSize, index: Int, onChangeIndex: @escaping (_ index: Int) -> Void) {
         self.namespace = namespace
         self.items = items
         self.size = size
-
-        self._index = index
+        self.index = index
+        self.onChangeIndex = onChangeIndex
     }
 
     var body: some View {
