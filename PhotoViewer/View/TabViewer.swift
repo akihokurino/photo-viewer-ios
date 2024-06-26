@@ -38,5 +38,10 @@ struct TabViewer: View {
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         }
+        .onChange(of: index) { _, new in
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
+                onChangeIndex(new)
+            }
+        }
     }
 }
