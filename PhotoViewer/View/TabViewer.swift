@@ -24,16 +24,21 @@ struct TabViewer: View {
 
             TabView(selection: $index) {
                 ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
-                    GeometryReader { g in
-                        Group {
-                            ZoomableScrollView {
-                                LocalImageView(asset: item, size: size, autoHeight: true)
+                    if item.isVideo {
+                        LoopVideoPlayerView(asset: item, size: size, suppressLoop: true)
+                            .tag(i)
+                    } else {
+                        GeometryReader { g in
+                            Group {
+                                ZoomableScrollView {
+                                    LocalImageView(asset: item, size: size, autoHeight: true)
+                                }
                             }
+                            .position(x: g.frame(in: .local).midX, y: g.frame(in: .local).midY)
                         }
-                        .position(x: g.frame(in: .local).midX, y: g.frame(in: .local).midY)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .tag(i)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .tag(i)
                 }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))

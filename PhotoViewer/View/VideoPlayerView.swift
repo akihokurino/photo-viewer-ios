@@ -7,6 +7,7 @@ struct LoopVideoPlayerView: View {
     private let start: Double
     private let end: Double?
     private let namespace: Namespace.ID?
+    private let suppressLoop: Bool
     @StateObject var resolver: VideoResolver
     @State private var player = AVPlayer()
     @State private var timeObserverToken: Any?
@@ -17,7 +18,8 @@ struct LoopVideoPlayerView: View {
          size: CGSize,
          start: Double = 0,
          end: Double? = nil,
-         namespace: Namespace.ID? = nil)
+         namespace: Namespace.ID? = nil,
+         suppressLoop: Bool = false)
     {
         self._resolver = StateObject(wrappedValue: VideoResolver(asset: asset))
         self.asset = asset
@@ -25,6 +27,7 @@ struct LoopVideoPlayerView: View {
         self.start = start
         self.end = end
         self.namespace = namespace
+        self.suppressLoop = suppressLoop
     }
 
     var body: some View {
@@ -94,7 +97,9 @@ struct LoopVideoPlayerView: View {
             if let end = end, time.seconds >= end {
                 let seekTime = CMTime(seconds: self.start, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
                 self.player.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .zero) { _ in
-                    self.player.play()
+                    if !suppressLoop {
+                        self.player.play()
+                    }
                 }
             }
 
@@ -104,7 +109,9 @@ struct LoopVideoPlayerView: View {
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: player.currentItem, queue: .main) { _ in
             let seekTime = CMTime(seconds: self.start, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             self.player.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .zero) { _ in
-                self.player.play()
+                if !suppressLoop {
+                    self.player.play()
+                }
             }
         }
     }

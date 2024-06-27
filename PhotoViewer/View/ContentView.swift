@@ -54,18 +54,18 @@ struct ContentView: View {
 
                             if isPresentedGalleryViewer {
                                 GeometryReader(content: { proxy in
-//                                    GalleryViewer(namespace: namespace, items: viewStore.assets.items, size: proxy.size, index: viewStore.assetSelection ?? 0, onChangeIndex: { index in
-//                                        viewStore.send(.setAssetSelection(index))
-//                                    }) {
-//                                        withAnimation(.easeOutExpo) {
-//                                            isPresentedGalleryViewer = false
-//                                        }
-//                                        viewStore.send(.setAssetSelection(nil))
-//                                    }
-
-                                    TabViewer(namespace: namespace, items: viewStore.assets.items, size: proxy.size, index: viewStore.assetSelection ?? 0) { index in
+                                    GalleryViewer(namespace: namespace, items: viewStore.assets.items, size: proxy.size, index: viewStore.assetSelection ?? 0, onChangeIndex: { index in
                                         viewStore.send(.setAssetSelection(index))
+                                    }) {
+                                        withAnimation(.easeOutExpo) {
+                                            isPresentedGalleryViewer = false
+                                        }
+                                        viewStore.send(.setAssetSelection(nil))
                                     }
+
+//                                    TabViewer(namespace: namespace, items: viewStore.assets.items, size: proxy.size, index: viewStore.assetSelection ?? 0) { index in
+//                                        viewStore.send(.setAssetSelection(index))
+//                                    }
                                 })
                                 .zIndex(2)
                             }
