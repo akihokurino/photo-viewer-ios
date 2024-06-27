@@ -70,21 +70,18 @@ struct GalleryViewer: View {
                             if item.isVideo {
                                 LoopVideoPlayerView(asset: item, size: size, namespace: namespace)
                                     .offset(imageOffsetSize)
-                                   
+
                             } else {
                                 LocalImageView(asset: item, size: size, namespace: namespace, autoHeight: true)
                                     .offset(imageOffsetSize)
                                     .scaleEffect(currentScale)
-                                    
                             }
                         } else if abs(i - index) <= 5 {
                             LocalImageView(asset: item, size: size, autoHeight: true)
-                                
                         } else {
                             Rectangle()
                                 .foregroundColor(.clear)
                                 .frame(width: size.width, height: size.height)
-                                
                         }
                     }
                 }
@@ -119,7 +116,6 @@ struct GalleryViewer: View {
             }) {
                 Image(systemName: "xmark").foregroundColor(Color(UIColor.label))
             }
-
         })
     }
 

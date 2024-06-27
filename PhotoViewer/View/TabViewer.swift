@@ -37,25 +37,24 @@ struct TabViewer: View {
 
                 TabView(selection: $index) {
                     ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
-                        if item.isVideo {
-                            LoopVideoPlayerView(asset: item, size: size, suppressLoop: true)
-                                .tag(i)
-                                .gesture(tapGesture)
-                                .ignoresSafeArea()
-                        } else {
-                            GeometryReader { g in
-                                Group {
-                                    ZoomableScrollView {
-                                        LocalImageView(asset: item, size: size, autoHeight: true)
+                        Group {
+                            if item.isVideo {
+                                LoopVideoPlayerView(asset: item, size: size, suppressLoop: true)
+                            } else {
+                                GeometryReader { g in
+                                    Group {
+                                        ZoomableScrollView {
+                                            LocalImageView(asset: item, size: size, autoHeight: true)
+                                        }
                                     }
+                                    .position(x: g.frame(in: .local).midX, y: g.frame(in: .local).midY)
                                 }
-                                .position(x: g.frame(in: .local).midX, y: g.frame(in: .local).midY)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .tag(i)
-                            .gesture(tapGesture)
-                            .ignoresSafeArea()
                         }
+                        .tag(i)
+                        .gesture(tapGesture)
+                        .ignoresSafeArea()
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -85,7 +84,6 @@ struct TabViewer: View {
             }) {
                 Image(systemName: "xmark").foregroundColor(Color(UIColor.label))
             }
-
         })
         .onChange(of: index) { _, new in
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
