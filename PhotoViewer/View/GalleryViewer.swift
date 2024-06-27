@@ -4,6 +4,7 @@ struct GalleryViewer: View {
     let namespace: Namespace.ID
     let items: [LocalAsset]
     let size: CGSize
+    let controlingToolbars: [ToolbarPlacement]
     let onChangeIndex: (_ index: Int) -> Void
     let onClose: () -> Void
     let hStackSpacing: CGFloat = 2
@@ -15,6 +16,7 @@ struct GalleryViewer: View {
     @State private var currentScale: CGFloat = 1.0
     @State private var previousScale: CGFloat = 1.0
     @State private var previousTranslation = CGSize.zero
+    @State private var isFullscreen = false
 
     enum DragAxis {
         case horizontal
@@ -33,52 +35,92 @@ struct GalleryViewer: View {
         return items[index]
     }
 
-    init(namespace: Namespace.ID, items: [LocalAsset], size: CGSize, index: Int, onChangeIndex: @escaping (_ index: Int) -> Void, onClose: @escaping () -> Void) {
+    init(namespace: Namespace.ID,
+         items: [LocalAsset],
+         size: CGSize,
+         index: Int,
+         controlingToolbars: [ToolbarPlacement] = [],
+         onChangeIndex: @escaping (_ index: Int) -> Void,
+         onClose: @escaping () -> Void)
+    {
         self.namespace = namespace
         self.items = items
         self.size = size
+        self.index = index
+        self.controlingToolbars = controlingToolbars
         self.onChangeIndex = onChangeIndex
         self.onClose = onClose
-
-        self.index = index
         self.pagerOffsetSize = CGSize(width: -(size.width + hStackSpacing) * CGFloat(index), height: 0)
         self.imageOffsetSize = .zero
     }
 
     var body: some View {
         ZStack {
-            Color(UIColor.systemBackground)
-                .opacity(
-                    currentScale < 1 ? currentScale : 1.0 - (imageOffsetSize.height / size.height)
-                )
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea()
+            ZStack {
+                Color(UIColor.systemBackground)
+                    .opacity(
+                        currentScale < 1 ? currentScale : 1.0 - (imageOffsetSize.height / size.height)
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .ignoresSafeArea()
 
-            HStack(spacing: hStackSpacing) {
-                ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
-                    if item == selectedItem {
-                        if item.isVideo {
-                            LoopVideoPlayerView(asset: item, size: size, namespace: namespace)
-                                .offset(imageOffsetSize)
+                HStack(spacing: hStackSpacing) {
+                    ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
+                        if item == selectedItem {
+                            if item.isVideo {
+                                LoopVideoPlayerView(asset: item, size: size, namespace: namespace)
+                                    .offset(imageOffsetSize)
+                                   
+                            } else {
+                                LocalImageView(asset: item, size: size, namespace: namespace, autoHeight: true)
+                                    .offset(imageOffsetSize)
+                                    .scaleEffect(currentScale)
+                                    
+                            }
+                        } else if abs(i - index) <= 5 {
+                            LocalImageView(asset: item, size: size, autoHeight: true)
+                                
                         } else {
-                            LocalImageView(asset: item, size: size, namespace: namespace, autoHeight: true)
-                                .offset(imageOffsetSize)
-                                .scaleEffect(currentScale)
+                            Rectangle()
+                                .foregroundColor(.clear)
+                                .frame(width: size.width, height: size.height)
+                                
                         }
-                    } else if abs(i - index) <= 5 {
-                        LocalImageView(asset: item, size: size, autoHeight: true)
-                    } else {
-                        Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(width: size.width, height: size.height)
                     }
                 }
+                .frame(width: (size.width + hStackSpacing) * CGFloat(items.count) - hStackSpacing, height: size.height)
+                .offset(pagerOffsetSize)
+                .gesture(dragGesture)
+                .simultaneousGesture(panGesture)
+                .gesture(tapGesture)
             }
-            .frame(width: (size.width + hStackSpacing) * CGFloat(items.count) - hStackSpacing, height: size.height)
-            .offset(pagerOffsetSize)
-            .gesture(dragGesture)
-            .simultaneousGesture(panGesture)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
+
+            ForEach(controlingToolbars) {
+                if !isFullscreen {
+                    if $0.id == ToolbarPlacement.navigationBar.id {
+                        Color.clear
+                            .toolbarBackground(.visible, for: .navigationBar)
+                    } else if $0.id == ToolbarPlacement.tabBar.id {
+                        Color.clear
+                            .toolbarBackground(.visible, for: .tabBar)
+                    }
+                }
+
+                Color.clear
+                    .toolbar(isFullscreen ? .hidden : .visible, for: $0)
+            }
         }
+        .statusBar(hidden: isFullscreen)
+        .navigationBarItems(leading: Group {
+            Button(action: {
+                onClose()
+            }) {
+                Image(systemName: "xmark").foregroundColor(Color(UIColor.label))
+            }
+
+        })
     }
 
     var dragGesture: some Gesture {
@@ -168,6 +210,15 @@ struct GalleryViewer: View {
                         currentScale = 1
                         imageOffsetSize = .zero
                     }
+                }
+            }
+    }
+
+    var tapGesture: some Gesture {
+        TapGesture(count: 1)
+            .onEnded {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    isFullscreen.toggle()
                 }
             }
     }

@@ -54,18 +54,37 @@ struct ContentView: View {
 
                             if isPresentedGalleryViewer {
                                 GeometryReader(content: { proxy in
-                                    GalleryViewer(namespace: namespace, items: viewStore.assets.items, size: proxy.size, index: viewStore.assetSelection ?? 0, onChangeIndex: { index in
-                                        viewStore.send(.setAssetSelection(index))
-                                    }) {
+//                                    GalleryViewer(
+//                                        namespace: namespace,
+//                                        items: viewStore.assets.items,
+//                                        size: proxy.size,
+//                                        index: viewStore.assetSelection ?? 0,
+//                                        controlingToolbars: [.navigationBar, .tabBar],
+//                                        onChangeIndex: { index in
+//                                            viewStore.send(.setAssetSelection(index))
+//                                        }
+//                                    ) {
+//                                        withAnimation(.easeOutExpo) {
+//                                            isPresentedGalleryViewer = false
+//                                        }
+//                                        viewStore.send(.setAssetSelection(nil))
+//                                    }
+
+                                    TabViewer(
+                                        namespace: namespace,
+                                        items: viewStore.assets.items,
+                                        size: proxy.size,
+                                        index: viewStore.assetSelection ?? 0,
+                                        controlingToolbars: [.navigationBar, .tabBar],
+                                        onChangeIndex: { index in
+                                            viewStore.send(.setAssetSelection(index))
+                                        }
+                                    ) {
                                         withAnimation(.easeOutExpo) {
                                             isPresentedGalleryViewer = false
                                         }
                                         viewStore.send(.setAssetSelection(nil))
                                     }
-
-//                                    TabViewer(namespace: namespace, items: viewStore.assets.items, size: proxy.size, index: viewStore.assetSelection ?? 0) { index in
-//                                        viewStore.send(.setAssetSelection(index))
-//                                    }
                                 })
                                 .zIndex(2)
                             }
@@ -80,18 +99,6 @@ struct ContentView: View {
                 }
                 .navigationTitle(viewStore.navigationTitle)
                 .navigationBarTitleDisplayMode(.inline)
-                .navigationBarItems(leading: Group {
-                    if isPresentedGalleryViewer {
-                        Button(action: {
-                            withAnimation(.easeOutExpo) {
-                                isPresentedGalleryViewer = false
-                            }
-                            viewStore.send(.setAssetSelection(nil))
-                        }) {
-                            Image(systemName: "xmark").foregroundColor(Color(UIColor.label))
-                        }
-                    }
-                })
                 .modifier(HUDModifier(isPresented: viewStore.binding(
                     get: { $0.isPresentedHUD },
                     send: AppReducer.Action.isPresentedHUD
