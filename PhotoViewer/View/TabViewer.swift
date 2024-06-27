@@ -37,27 +37,27 @@ struct TabViewer: View {
 
                 TabView(selection: $index) {
                     ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
-                        Group {
-                            if item.isVideo {
-                                LoopVideoPlayerView(asset: item, size: size, suppressLoop: true)
-                            } else {
-                                GeometryReader { g in
-                                    Group {
-                                        ZoomableScrollView {
-                                            LocalImageView(asset: item, size: size, autoHeight: true)
-                                        }
+                        if item.isVideo {
+                            LoopVideoPlayerView(asset: item, size: size, suppressLoop: true)
+                                .ignoresSafeArea()
+                                .tag(i)
+                        } else {
+                            GeometryReader { g in
+                                Group {
+                                    ZoomableScrollView {
+                                        LocalImageView(asset: item, size: size, autoHeight: true)
                                     }
-                                    .position(x: g.frame(in: .local).midX, y: g.frame(in: .local).midY)
                                 }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .position(x: g.frame(in: .local).midX, y: g.frame(in: .local).midY)
                             }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .ignoresSafeArea()
+                            .tag(i)
                         }
-                        .tag(i)
-                        .gesture(tapGesture)
-                        .ignoresSafeArea()
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .gesture(tapGesture)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()
