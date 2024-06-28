@@ -54,23 +54,7 @@ struct ContentView: View {
 
                             if isPresentedGalleryViewer {
                                 GeometryReader(content: { proxy in
-                                    GalleryViewer(
-                                        namespace: namespace,
-                                        items: viewStore.assets.items,
-                                        size: proxy.size,
-                                        index: viewStore.assetSelection ?? 0,
-                                        controlingToolbars: [.navigationBar, .tabBar],
-                                        onChangeIndex: { index in
-                                            viewStore.send(.setAssetSelection(index))
-                                        }
-                                    ) {
-                                        withAnimation(.easeOutExpo) {
-                                            isPresentedGalleryViewer = false
-                                        }
-                                        viewStore.send(.setAssetSelection(nil))
-                                    }
-
-//                                    TabViewer(
+//                                    GalleryViewer(
 //                                        namespace: namespace,
 //                                        items: viewStore.assets.items,
 //                                        size: proxy.size,
@@ -85,6 +69,22 @@ struct ContentView: View {
 //                                        }
 //                                        viewStore.send(.setAssetSelection(nil))
 //                                    }
+
+                                    TabViewer(
+                                        namespace: namespace,
+                                        items: viewStore.assets.items,
+                                        size: proxy.size,
+                                        index: viewStore.assetSelection ?? 0,
+                                        controlingToolbars: [.navigationBar, .tabBar],
+                                        onChangeIndex: { index in
+                                            viewStore.send(.setAssetSelection(index))
+                                        }
+                                    ) {
+                                        withAnimation(.easeOutExpo) {
+                                            isPresentedGalleryViewer = false
+                                        }
+                                        viewStore.send(.setAssetSelection(nil))
+                                    }
                                 })
                                 .zIndex(2)
                             }

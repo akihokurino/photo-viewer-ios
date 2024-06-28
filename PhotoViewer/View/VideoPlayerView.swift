@@ -69,19 +69,10 @@ struct LoopVideoPlayerView: View {
     }
 
     private func start(video: AVPlayerItem) {
-        if let timeObserverToken = timeObserverToken {
-            player.removeTimeObserver(timeObserverToken)
-            self.timeObserverToken = nil
-        }
-
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {}
-
-        player.replaceCurrentItem(with: video)
-        player.seek(to: CMTime(seconds: start, preferredTimescale: CMTimeScale(NSEC_PER_SEC)))
-        player.play()
 
         Task {
             do {
@@ -89,7 +80,16 @@ struct LoopVideoPlayerView: View {
                 DispatchQueue.main.async {
                     self.duration = _duration?.seconds ?? 0.0
                 }
+
+                player.replaceCurrentItem(with: video)
+                await player.seek(to: CMTime(seconds: start, preferredTimescale: CMTimeScale(NSEC_PER_SEC)))
+                player.play()
             } catch {}
+        }
+
+        if let timeObserverToken = timeObserverToken {
+            player.removeTimeObserver(timeObserverToken)
+            self.timeObserverToken = nil
         }
 
         let interval = CMTime(seconds: 1.0, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
