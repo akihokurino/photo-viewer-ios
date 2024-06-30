@@ -93,14 +93,6 @@ extension AppReducer {
         var isPresentedHUD = false
         var isPresentedNextLoading = false
         var isPresentedPullToRefresh = false
-
-        var navigationTitle: String {
-            if let selection = assetSelection {
-                return "Photos - \(selection)"
-            } else {
-                return "Photos"
-            }
-        }
     }
 
     enum Action {

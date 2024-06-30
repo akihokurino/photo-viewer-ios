@@ -80,16 +80,12 @@ struct TabViewer: View {
         .statusBar(hidden: isFullscreen)
         .navigationBarItems(leading: Group {
             Button(action: {
+                onChangeIndex(index)
                 onClose()
             }) {
                 Image(systemName: "xmark").foregroundColor(Color(UIColor.label))
             }
         })
-        .onChange(of: index) { _, new in
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(200)) {
-                onChangeIndex(new)
-            }
-        }
     }
 
     var tapGesture: some Gesture {

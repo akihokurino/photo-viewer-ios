@@ -112,6 +112,7 @@ struct GalleryViewer: View {
         .statusBar(hidden: isFullscreen)
         .navigationBarItems(leading: Group {
             Button(action: {
+                onChangeIndex(index)
                 onClose()
             }) {
                 Image(systemName: "xmark").foregroundColor(Color(UIColor.label))
@@ -169,12 +170,12 @@ struct GalleryViewer: View {
                         pagerOffsetSize = CGSize(width: -(size.width + hStackSpacing) * CGFloat(targetIndex), height: 0)
                     } completion: {
                         index = targetIndex
-                        onChangeIndex(targetIndex)
                     }
                 case .verticalUp:
                     break
                 case .verticalDown:
                     if value.translation.height > 200 {
+                        onChangeIndex(index)
                         onClose()
                     } else {
                         withAnimation(.easeOut(duration: 0.2)) {
